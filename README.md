@@ -21,9 +21,9 @@ The system consists of two main components:
 
 1. Install Python (3.x recommended) on your computer.
 2. Install the required Python libraries using pip:
-3. '''bash
-   pip install pygame pyserial
-   '''
+```bash
+pip install pygame pyserial
+'''
 
 
 5. Download or clone the repository to your local machine.
