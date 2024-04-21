@@ -23,11 +23,9 @@ The system consists of two main components:
 2. Install the required Python libraries using pip:
 ```bash
 pip install pygame pyserial
-'''
-
-
-5. Download or clone the repository to your local machine.
-6. Run the Python script `main.py` to start the waste route optimization program.
+```
+3. Download or clone the repository to your local machine.
+4. Run the Python script `main.py` to start the waste route optimization program.
 
 ## Usage
 
