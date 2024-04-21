@@ -2,6 +2,7 @@ import pygame
 import random
 import time
 import itertools
+import serial
 
 # Define the map size in kilometers
 MapSizeKm = 50.0
@@ -15,6 +16,10 @@ NodeRadius = 20
 
 # Define the delay between generating garbage nodes (in milliseconds)
 NodeGenerationDelay = 3000  # 3 seconds
+
+# Serial communication settings
+serial_port = 'COM3'  # Change this to match your Arduino's serial port
+baud_rate = 9600
 
 # Initialize Pygame
 pygame.init()
@@ -51,16 +56,23 @@ button_text_color = (255, 255, 255)
 button_font = pygame.font.Font(None, 36)
 button_text = button_font.render("Show Route", True, button_text_color)
 button_text_rect = button_text.get_rect()
-button_rect = pygame.Rect(WindowWidth -200, WindowHeight -50 , 200, 50)
+button_rect = pygame.Rect(WindowWidth - 200, WindowHeight - 50, 200, 50)
 
 # List to store positions and images of all waste bins
 wet_waste_bins = []
 dry_waste_bins = []
 
+# Initialize serial communication
+try:
+    ser = serial.Serial(serial_port, baud_rate)
+    print("Serial connection established")
+except serial.SerialException as e:
+    print("Error opening serial port:", e)
+
 # Function to generate random node
 def generate_random_node():
-    x = random.uniform(0, MapSizeKm-5)
-    y = random.uniform(0, MapSizeKm-5)
+    x = random.uniform(0, MapSizeKm - 5)
+    y = random.uniform(0, MapSizeKm - 5)
     return x, y
 
 # Function to calculate Euclidean distance between two points
@@ -139,20 +151,27 @@ while running:
 
     # Check if it's time to generate a new node
     if not show_route and pygame.time.get_ticks() - last_generation_time >= NodeGenerationDelay:
-        num = random.randint(1, 2)
-        # Generate wet waste bins
-        if num == 1:
-            if len(wet_waste_bins) < 5:
+        # Generate 5 random nodes initially
+        if len(wet_waste_bins) < 5:
+            waste_type = random.choice(["Wet Waste", "Dry Waste"])
+            if waste_type == "Wet Waste":
                 wet_waste_position = generate_random_node()
                 wet_waste_bins.append(wet_waste_position)
-
-        # Generate dry waste bins
-        else:
-            if len(dry_waste_bins) < 5:
+            elif waste_type == "Dry Waste":
                 dry_waste_position = generate_random_node()
                 dry_waste_bins.append(dry_waste_position)
+            last_generation_time = pygame.time.get_ticks()  # Update the time of the last node generation
 
-        last_generation_time = pygame.time.get_ticks()  # Update the time of the last node generation
+        # Wait for input from Arduino
+        if ser and ser.in_waiting > 0:
+            waste_type = ser.readline().decode().strip()
+            if waste_type == "Wet Waste":
+                wet_waste_position = generate_random_node()
+                wet_waste_bins.append(wet_waste_position)
+            elif waste_type == "Dry Waste":
+                dry_waste_position = generate_random_node()
+                dry_waste_bins.append(dry_waste_position)
+            last_generation_time = pygame.time.get_ticks()  # Update the time of the last node generation
 
     # Draw waste bins
     for wet_waste_position in wet_waste_bins:
@@ -177,3 +196,4 @@ while running:
 
 # Quit Pygame
 pygame.quit()
+
