@@ -15,10 +15,38 @@ The system consists of two main components:
 ### Arduino Setup
 
 1. Connect the HC-SR04, DHT11, and MQ-4 sensors to the Arduino board as per the connections specified in the code.
-2. Upload the provided Arduino sketch (`waste_bin_monitoring.ino`) to the Arduino board.
+2. Upload the provided Arduino sketch (`main.cpp`) to the Arduino board.
 
 ### Python Setup
 
 1. Install Python (3.x recommended) on your computer.
 2. Install the required Python libraries using pip:
+3. '''bash
+   pip install pygame pyserial
+   '''
+
+
+5. Download or clone the repository to your local machine.
+6. Run the Python script `main.py` to start the waste route optimization program.
+
+## Usage
+
+1. Start the Python program (`waste_route_optimization.py`) to initialize the waste route optimization system.
+2. The program will randomly generate 5 waste bins on the GUI.
+3. Connect the Arduino to the computer via USB.
+4. Once the Arduino detects waste in a bin, it will send a signal indicating the waste type (wet or dry) to the computer.
+5. The Python program will update the GUI to reflect the new waste bin status and optimize the waste collection route.
+6. Click the "Show Route" button on the GUI to display the optimized waste collection route.
+7. Waste collection personnel can follow the displayed route to efficiently collect waste from the bins.
+
+## Contributors
+
+- [Aamir Mohammed](https://github.com/Snapman5678)
+- [Akhmal Mohammed](https://github.com/contributor2)
+- [Adhvaith Rajesh](https://github.com/contributor3)
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
+
 
