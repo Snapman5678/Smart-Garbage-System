@@ -15,7 +15,7 @@ WindowHeight = 600
 NodeRadius = 20
 
 # Define the delay between generating garbage nodes (in milliseconds)
-NodeGenerationDelay = 3000  # 3 seconds
+NodeGenerationDelay = 1000  # 1 seconds
 
 # Serial communication settings
 serial_port = 'COM3'  # Change this to match your Arduino's serial port
@@ -151,16 +151,23 @@ while running:
 
     # Check if it's time to generate a new node
     if not show_route and pygame.time.get_ticks() - last_generation_time >= NodeGenerationDelay:
-        # Generate 5 random nodes initially
-        if len(wet_waste_bins) < 5:
-            waste_type = random.choice(["Wet Waste", "Dry Waste"])
-            if waste_type == "Wet Waste":
+        waste_type = random.choice(["Wet Waste", "Dry Waste"])
+
+        if waste_type == "Wet Waste":
+            if len(wet_waste_bins) < 5:
                 wet_waste_position = generate_random_node()
                 wet_waste_bins.append(wet_waste_position)
-            elif waste_type == "Dry Waste":
+            else:
+                print("Maximum number of wet waste bins reached. Cannot add more.")
+        elif waste_type == "Dry Waste":
+            if len(dry_waste_bins) < 5:
                 dry_waste_position = generate_random_node()
                 dry_waste_bins.append(dry_waste_position)
-            last_generation_time = pygame.time.get_ticks()  # Update the time of the last node generation
+            else:
+                print("Maximum number of dry waste bins reached. Cannot add more.")
+
+        last_generation_time = pygame.time.get_ticks()
+
 
         # Wait for input from Arduino
         if ser and ser.in_waiting > 0:
