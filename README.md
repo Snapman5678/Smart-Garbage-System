@@ -41,7 +41,6 @@ pip install pygame pyserial
 
 - [Aamir Mohammed](https://github.com/Snapman5678)
 - [Akhmal Mohammed](https://github.com/contributor2)
-- [Adhvaith Rajesh](https://github.com/contributor3)
 
 ## License
 
